@@ -1380,7 +1380,7 @@ def led_eff_police(np, oldstate):
     """
     state = oldstate or {"phase": 0}
     n = len(np)
-    group_size = 3  # Number of LEDs in each color group
+    half_size = n // 2
 
     # Phase determines which lights are on.
     # 0-24: Red group on
@@ -1397,12 +1397,12 @@ def led_eff_police(np, oldstate):
 
     np.fill(off)
 
-    if 0 <= phase < 25:  # Red strobe
-        for i in range(group_size):
-            np[i] = red 
-    elif 50 <= phase < 75:  # Blue strobe
-        for i in range(group_size):
-            np[n // 2 + i] = blue
+    if 0 <= phase < 25:  # Red half
+        for i in range(1, half_size - 1):
+            np[i] = red
+    elif 50 <= phase < 75:  # Blue half
+        for i in range(half_size + 1, n - 1):
+            np[i] = blue
 
     # Speed controls the flash rate. A higher value means faster flashing.
     increment = max(1, led_speed.value / 10)
